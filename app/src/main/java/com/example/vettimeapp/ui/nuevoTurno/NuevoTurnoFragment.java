@@ -36,9 +36,13 @@ public class NuevoTurnoFragment extends Fragment {
             binding.spMascota.setAdapter(adapter);
         });
 
+        nuevoTurnoViewModel.getHorarios().observe(getViewLifecycleOwner(), horarios -> {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, horarios);
+            binding.spHorario.setAdapter(adapter);
+        });
 
         binding.dtCalendario.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-Log.d("Fecha", dayOfMonth + "/" + (month + 1) + "/" + year+ "Date " +"");
+            nuevoTurnoViewModel.setHorarios(dayOfMonth, month+1, year,binding.spTarea.getSelectedItem().toString());
         });
 
         nuevoTurnoViewModel.setTareas();

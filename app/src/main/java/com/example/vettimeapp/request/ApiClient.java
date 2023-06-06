@@ -17,11 +17,12 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Path;
 
 public class ApiClient {
 
     //private static final String PATH="http://10.120.10.172:5200/api/";//"http://localhost:5500/api/";
-    private static final String PATH="http://192.168.15.31:5200/api/";
+    private static final String PATH="http://192.168.15.7:5200/api/";
     private static EndPointVetTime endPointVetTime;
 
     public static EndPointVetTime getEndpointVetTime(){
@@ -46,8 +47,8 @@ public class ApiClient {
         @GET("Mascotas")
         Call<List<Mascota>> obtenerMascotas();
 
-        @GET("Turnos")
-        Call<List<Turno>> obtenerTurnos();
+        @POST("Tareas/Turnos/{fecha}")
+        Call<List<String>> obtenerTurnos(@Body Tarea tarea,@Path("fecha") String fecha);
 
     }
 
