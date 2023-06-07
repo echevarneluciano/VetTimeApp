@@ -16,6 +16,7 @@ import com.example.vettimeapp.modelos.Tarea;
 import com.example.vettimeapp.modelos.Turno;
 import com.example.vettimeapp.modelos.TurnosPorTarea;
 import com.example.vettimeapp.request.ApiClient;
+import com.example.vettimeapp.utils.Utils;
 
 import org.json.JSONObject;
 
@@ -40,11 +41,13 @@ public class NuevoTurnoViewModel extends AndroidViewModel {
     private MutableLiveData<List<String>> mHorarios;
     private List<Tarea> tareasDisponibles;
     private Context context;
+    private Utils utils;
 
 
     public NuevoTurnoViewModel(@NonNull Application application) {
         super(application);
         context = application.getApplicationContext();
+        utils = new Utils();
     }
 
     public LiveData<List<String>> getTareas() {
@@ -124,11 +127,7 @@ public class NuevoTurnoViewModel extends AndroidViewModel {
 
     public void setHorarios(int dia, int mes, int anio,String tarea) {
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(anio, mes - 1, dia);
-        Date fecha = calendar.getTime();
-        SimpleDateFormat sdf = new SimpleDateFormat("EEEE", Locale.getDefault());
-        String nombreDia = sdf.format(fecha);
+        String nombreDia = utils.getDate(anio, mes, dia);
         System.out.println("Nombre del día: " + nombreDia);
 
         if(tarea.equals("Seleccione tarea...")) {
@@ -148,9 +147,7 @@ public class NuevoTurnoViewModel extends AndroidViewModel {
                 public void onResponse(Call<List<TurnosPorTarea>> call, Response<List<TurnosPorTarea>> response) {
                     if (response.body() != null) {
                         List<TurnosPorTarea> turnos = response.body();
-                        turnos.forEach(turno -> {
-
-                        });
+                        utils.getTurnoTarea(turnos, nombreDia);
                     }
                 }
                 @Override
