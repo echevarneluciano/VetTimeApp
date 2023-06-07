@@ -14,10 +14,20 @@ import androidx.lifecycle.ViewModel;
 import com.example.vettimeapp.modelos.Mascota;
 import com.example.vettimeapp.modelos.Tarea;
 import com.example.vettimeapp.modelos.Turno;
+import com.example.vettimeapp.modelos.TurnosPorTarea;
 import com.example.vettimeapp.request.ApiClient;
 
+import org.json.JSONObject;
+
+import java.lang.reflect.Field;
+import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -113,6 +123,14 @@ public class NuevoTurnoViewModel extends AndroidViewModel {
     }
 
     public void setHorarios(int dia, int mes, int anio,String tarea) {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(anio, mes - 1, dia);
+        Date fecha = calendar.getTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE", Locale.getDefault());
+        String nombreDia = sdf.format(fecha);
+        System.out.println("Nombre del día: " + nombreDia);
+
         if(tarea.equals("Seleccione tarea...")) {
             Toast.makeText(context, "Seleccione una tarea", Toast.LENGTH_LONG).show();
         }else {
@@ -123,25 +141,20 @@ public class NuevoTurnoViewModel extends AndroidViewModel {
         horarios.add("Seleccione horario...");
         try {
             ApiClient.EndPointVetTime end = ApiClient.getEndpointVetTime();
-            Call<List<String>> call = end.obtenerTurnos(tareaSeleccionada, mes+"-"+dia+"-"+anio);
+            Call<List<TurnosPorTarea>> call = end.obtenerTurnos(tareaSeleccionada, mes+"-"+dia+"-"+anio);
             Log.d("salida", call.request().url().toString());
-            call.enqueue(new Callback<List<String>>() {
+            call.enqueue(new Callback<List<TurnosPorTarea>>() {
                 @Override
-                public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+                public void onResponse(Call<List<TurnosPorTarea>> call, Response<List<TurnosPorTarea>> response) {
                     if (response.body() != null) {
-                        if (response.body().size() == 0) {
-                            Toast.makeText(context, "No hay turnos disponibles", Toast.LENGTH_LONG).show();
-                            mHorarios.setValue(horarios);
-                        }else {
-                            for(String horario : response.body()) {
-                                horarios.add(horario);
-                            }
-                            mHorarios.setValue(horarios);
-                        }
+                        List<TurnosPorTarea> turnos = response.body();
+                        turnos.forEach(turno -> {
+
+                        });
                     }
                 }
                 @Override
-                public void onFailure(Call<List<String>> call, Throwable t) {
+                public void onFailure(Call<List<TurnosPorTarea>> call, Throwable t) {
                     Log.d("salida 1", t.getMessage());
                 }
             });

@@ -4,6 +4,7 @@ import com.example.vettimeapp.modelos.Empleado;
 import com.example.vettimeapp.modelos.Mascota;
 import com.example.vettimeapp.modelos.Tarea;
 import com.example.vettimeapp.modelos.Turno;
+import com.example.vettimeapp.modelos.TurnosPorTarea;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -48,7 +49,8 @@ public class ApiClient {
         Call<List<Mascota>> obtenerMascotas();
 
         @POST("Tareas/Turnos/{fecha}")
-        Call<List<String>> obtenerTurnos(@Body Tarea tarea,@Path("fecha") String fecha);
+        //Call<List<String>> obtenerTurnos(@Body Tarea tarea, @Path("fecha") String fecha);
+        Call<List<TurnosPorTarea>> obtenerTurnos(@Body Tarea tarea, @Path("fecha") String fecha);
 
     }
 
