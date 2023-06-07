@@ -2,6 +2,7 @@ package com.example.vettimeapp.ui.nuevoTurno;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -146,8 +147,13 @@ public class NuevoTurnoViewModel extends AndroidViewModel {
                 @Override
                 public void onResponse(Call<List<TurnosPorTarea>> call, Response<List<TurnosPorTarea>> response) {
                     if (response.body() != null) {
-                        List<TurnosPorTarea> turnos = response.body();
-                        utils.getTurnoTarea(turnos, nombreDia);
+                        if (response.body().isEmpty()) {
+                            Toast.makeText(context, "No hay turnos para esta tarea", Toast.LENGTH_LONG).show();
+                        }else {
+                            List<TurnosPorTarea> turnos = response.body();
+                            horarios.addAll(utils.getTurnoTarea(turnos, nombreDia));
+                            mHorarios.setValue(horarios);
+                        }
                     }
                 }
                 @Override

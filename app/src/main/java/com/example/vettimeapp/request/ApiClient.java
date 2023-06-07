@@ -5,6 +5,7 @@ import com.example.vettimeapp.modelos.Mascota;
 import com.example.vettimeapp.modelos.Tarea;
 import com.example.vettimeapp.modelos.Turno;
 import com.example.vettimeapp.modelos.TurnosPorTarea;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -22,8 +23,8 @@ import retrofit2.http.Path;
 
 public class ApiClient {
 
-    //private static final String PATH="http://10.120.10.172:5200/api/";//"http://localhost:5500/api/";
-    private static final String PATH="http://192.168.15.7:5200/api/";
+    private static final String PATH="http://10.120.10.172:5200/api/";//"http://localhost:5500/api/";
+    //private static final String PATH="http://192.168.15.7:5200/api/";
     private static EndPointVetTime endPointVetTime;
 
     public static EndPointVetTime getEndpointVetTime(){

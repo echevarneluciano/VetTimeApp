@@ -3,29 +3,29 @@ package com.example.vettimeapp.modelos;
 import java.sql.Time;
 
 public class TurnosPorTarea {
-    private Time monday_ini;
-    private Time monday_fin;
-    private Time tuesday_ini;
-    private Time tuesday_fin;
-    private Time wednesday_ini;
-    private Time wednesday_fin;
-    private Time thursday_ini;
-    private Time thursday_fin;
-    private Time friday_ini;
-    private Time friday_fin;
-    private Time saturday_ini;
-    private Time saturday_fin;
-    private Time sunday_ini;
-    private Time sunday_fin;
+    private String monday_ini;
+    private String monday_fin;
+    private String tuesday_ini;
+    private String tuesday_fin;
+    private String wednesday_ini;
+    private String wednesday_fin;
+    private String thursday_ini;
+    private String thursday_fin;
+    private String friday_ini;
+    private String friday_fin;
+    private String saturday_ini;
+    private String saturday_fin;
+    private String sunday_ini;
+    private String sunday_fin;
     private Integer empleadoId;
 
     public TurnosPorTarea() {
     }
 
-    public TurnosPorTarea(Time monday_ini, Time monday_fin, Time tuesday_ini, Time tuesday_fin,
-                          Time wednesday_ini, Time wednesday_fin, Time thursday_ini, Time thursday_fin,
-                          Time friday_ini, Time friday_fin, Time saturday_ini, Time saturday_fin,
-                          Time sunday_ini, Time sunday_fin, Integer empleadoId) {
+    public TurnosPorTarea(String monday_ini, String monday_fin, String tuesday_ini, String tuesday_fin,
+                          String wednesday_ini, String wednesday_fin, String thursday_ini, String thursday_fin,
+                          String friday_ini, String friday_fin, String saturday_ini, String saturday_fin,
+                          String sunday_ini, String sunday_fin, Integer empleadoId) {
         this.monday_ini = monday_ini;
         this.monday_fin = monday_fin;
         this.tuesday_ini = tuesday_ini;
@@ -43,115 +43,115 @@ public class TurnosPorTarea {
         this.empleadoId = empleadoId;
     }
 
-    public Time getMonday_ini() {
+    public String getMonday_ini() {
         return monday_ini;
     }
 
-    public void setMonday_ini(Time monday_ini) {
+    public void setMonday_ini(String monday_ini) {
         this.monday_ini = monday_ini;
     }
 
-    public Time getMonday_fin() {
+    public String getMonday_fin() {
         return monday_fin;
     }
 
-    public void setMonday_fin(Time monday_fin) {
+    public void setMonday_fin(String monday_fin) {
         this.monday_fin = monday_fin;
     }
 
-    public Time getTuesday_ini() {
+    public String getTuesday_ini() {
         return tuesday_ini;
     }
 
-    public void setTuesday_ini(Time tuesday_ini) {
+    public void setTuesday_ini(String tuesday_ini) {
         this.tuesday_ini = tuesday_ini;
     }
 
-    public Time getTuesday_fin() {
+    public String getTuesday_fin() {
         return tuesday_fin;
     }
 
-    public void setTuesday_fin(Time tuesday_fin) {
+    public void setTuesday_fin(String tuesday_fin) {
         this.tuesday_fin = tuesday_fin;
     }
 
-    public Time getWednesday_ini() {
+    public String getWednesday_ini() {
         return wednesday_ini;
     }
 
-    public void setWednesday_ini(Time wednesday_ini) {
+    public void setWednesday_ini(String wednesday_ini) {
         this.wednesday_ini = wednesday_ini;
     }
 
-    public Time getWednesday_fin() {
+    public String getWednesday_fin() {
         return wednesday_fin;
     }
 
-    public void setWednesday_fin(Time wednesday_fin) {
+    public void setWednesday_fin(String wednesday_fin) {
         this.wednesday_fin = wednesday_fin;
     }
 
-    public Time getThursday_ini() {
+    public String getThursday_ini() {
         return thursday_ini;
     }
 
-    public void setThursday_ini(Time thursday_ini) {
+    public void setThursday_ini(String thursday_ini) {
         this.thursday_ini = thursday_ini;
     }
 
-    public Time getThursday_fin() {
+    public String getThursday_fin() {
         return thursday_fin;
     }
 
-    public void setThursday_fin(Time thursday_fin) {
+    public void setThursday_fin(String thursday_fin) {
         this.thursday_fin = thursday_fin;
     }
 
-    public Time getFriday_ini() {
+    public String getFriday_ini() {
         return friday_ini;
     }
 
-    public void setFriday_ini(Time friday_ini) {
+    public void setFriday_ini(String friday_ini) {
         this.friday_ini = friday_ini;
     }
 
-    public Time getFriday_fin() {
+    public String getFriday_fin() {
         return friday_fin;
     }
 
-    public void setFriday_fin(Time friday_fin) {
+    public void setFriday_fin(String friday_fin) {
         this.friday_fin = friday_fin;
     }
 
-    public Time getSaturday_ini() {
+    public String getSaturday_ini() {
         return saturday_ini;
     }
 
-    public void setSaturday_ini(Time saturday_ini) {
+    public void setSaturday_ini(String saturday_ini) {
         this.saturday_ini = saturday_ini;
     }
 
-    public Time getSaturday_fin() {
+    public String getSaturday_fin() {
         return saturday_fin;
     }
 
-    public void setSaturday_fin(Time saturday_fin) {
+    public void setSaturday_fin(String saturday_fin) {
         this.saturday_fin = saturday_fin;
     }
 
-    public Time getSunday_ini() {
+    public String getSunday_ini() {
         return sunday_ini;
     }
 
-    public void setSunday_ini(Time sunday_ini) {
+    public void setSunday_ini(String sunday_ini) {
         this.sunday_ini = sunday_ini;
     }
 
-    public Time getSunday_fin() {
+    public String getSunday_fin() {
         return sunday_fin;
     }
 
-    public void setSunday_fin(Time sunday_fin) {
+    public void setSunday_fin(String sunday_fin) {
         this.sunday_fin = sunday_fin;
     }
 
