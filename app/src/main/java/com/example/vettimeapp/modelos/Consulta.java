@@ -7,8 +7,8 @@ public class Consulta implements Serializable {
 
     private int id;
     private int estado;
-    private Date tiempoInicio;
-    private Date tiempoFin;
+    private String tiempoInicio;
+    private String tiempoFin;
     private int cliente_mascotaId;
     private int empleadoId;
     private int activo;
@@ -20,7 +20,7 @@ public class Consulta implements Serializable {
 
     }
 
-    public Consulta(int id, int estado, Date tiempoInicio, Date tiempoFin, int cliente_mascotaId, int empleadoId, int activo, String detalle, Empleado empleado, Cliente cliente) {
+    public Consulta(int id, int estado, String tiempoInicio, String tiempoFin, int cliente_mascotaId, int empleadoId, int activo, String detalle, Empleado empleado, Cliente cliente) {
         this.id = id;
         this.estado = estado;
         this.tiempoInicio = tiempoInicio;
@@ -49,19 +49,19 @@ public class Consulta implements Serializable {
         this.estado = estado;
     }
 
-    public Date getTiempoInicio() {
+    public String getTiempoInicio() {
         return tiempoInicio;
     }
 
-    public void setTiempoInicio(Date tiempoInicio) {
+    public void setTiempoInicio(String tiempoInicio) {
         this.tiempoInicio = tiempoInicio;
     }
 
-    public Date getTiempoFin() {
+    public String getTiempoFin() {
         return tiempoFin;
     }
 
-    public void setTiempoFin(Date tiempoFin) {
+    public void setTiempoFin(String tiempoFin) {
         this.tiempoFin = tiempoFin;
     }
 

@@ -162,4 +162,25 @@ public class TurnosPorTarea {
     public void setEmpleadoId(Integer empleadoId) {
         this.empleadoId = empleadoId;
     }
+
+    @Override
+    public String toString() {
+        return "TurnosPorTarea{" +
+                "monday_ini='" + monday_ini + '\'' +
+                ", monday_fin='" + monday_fin + '\'' +
+                ", tuesday_ini='" + tuesday_ini + '\'' +
+                ", tuesday_fin='" + tuesday_fin + '\'' +
+                ", wednesday_ini='" + wednesday_ini + '\'' +
+                ", wednesday_fin='" + wednesday_fin + '\'' +
+                ", thursday_ini='" + thursday_ini + '\'' +
+                ", thursday_fin='" + thursday_fin + '\'' +
+                ", friday_ini='" + friday_ini + '\'' +
+                ", friday_fin='" + friday_fin + '\'' +
+                ", saturday_ini='" + saturday_ini + '\'' +
+                ", saturday_fin='" + saturday_fin + '\'' +
+                ", sunday_ini='" + sunday_ini + '\'' +
+                ", sunday_fin='" + sunday_fin + '\'' +
+                ", empleadoId=" + empleadoId +
+                '}';
+    }
 }

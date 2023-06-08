@@ -1,5 +1,6 @@
 package com.example.vettimeapp.request;
 
+import com.example.vettimeapp.modelos.Consulta;
 import com.example.vettimeapp.modelos.Empleado;
 import com.example.vettimeapp.modelos.Mascota;
 import com.example.vettimeapp.modelos.Tarea;
@@ -23,8 +24,8 @@ import retrofit2.http.Path;
 
 public class ApiClient {
 
-    private static final String PATH="http://10.120.10.172:5200/api/";//"http://localhost:5500/api/";
-    //private static final String PATH="http://192.168.15.7:5200/api/";
+    //private static final String PATH="http://10.120.10.172:5200/api/";//"http://localhost:5500/api/";
+    private static final String PATH="http://192.168.15.7:5200/api/";
     private static EndPointVetTime endPointVetTime;
 
     public static EndPointVetTime getEndpointVetTime(){
@@ -50,8 +51,10 @@ public class ApiClient {
         Call<List<Mascota>> obtenerMascotas();
 
         @POST("Tareas/Turnos/{fecha}")
-        //Call<List<String>> obtenerTurnos(@Body Tarea tarea, @Path("fecha") String fecha);
-        Call<List<TurnosPorTarea>> obtenerTurnos(@Body Tarea tarea, @Path("fecha") String fecha);
+        Call<List<TurnosPorTarea>> obtenerTurnosPorFecha(@Body Tarea tarea, @Path("fecha") String fecha);
+
+        @POST("Consultas/Turnos/{fecha}")
+        Call<List<Consulta>> obtenerConsultasPorFecha(@Path("fecha") String fecha);
 
     }
 

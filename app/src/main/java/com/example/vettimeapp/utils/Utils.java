@@ -4,9 +4,11 @@ import android.os.Build;
 import android.util.Log;
 
 
+import com.example.vettimeapp.modelos.Consulta;
 import com.example.vettimeapp.modelos.TurnosPorTarea;
 
 import java.sql.Time;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
@@ -102,6 +104,7 @@ public class Utils {
                     } catch (ParseException e) {
                         throw new RuntimeException(e);
                     }
+                    break;
                 case "Saturday":
                     tiempoInicio = tareas.get(i).getSaturday_ini();
                     tiempoFin = tareas.get(i).getSaturday_fin();
@@ -113,6 +116,7 @@ public class Utils {
                     } catch (ParseException e) {
                         throw new RuntimeException(e);
                     }
+                    break;
                 case "Sunday":
                     tiempoInicio = tareas.get(i).getSunday_ini();
                     tiempoFin = tareas.get(i).getSunday_fin();
@@ -124,6 +128,7 @@ public class Utils {
                     } catch (ParseException e) {
                         throw new RuntimeException(e);
                     }
+                    break;
             }
         }
 
@@ -146,6 +151,50 @@ public class Utils {
 
         return intervalos;
 
+    }
+
+    public List<String> getTurnosEntregados(List<Consulta> consultas) {
+
+        List<String> intervalos = new ArrayList<>();
+        DateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        DateFormat outputFormat = new SimpleDateFormat("HH:mm:ss");
+
+        for (int i = 0; i < consultas.size(); i++) {
+            String tiempoInicioTexto = consultas.get(i).getTiempoInicio();
+            String tiempoFinTexto = consultas.get(i).getTiempoFin();
+
+        try {
+            Date tiempoInicio = inputFormat.parse(tiempoInicioTexto);
+            Date tiempoFin = inputFormat.parse(tiempoFinTexto);
+
+            Date intervaloActual = tiempoInicio;
+            while (intervaloActual.before(tiempoFin)) {
+                intervalos.add(outputFormat.format(intervaloActual));
+                intervaloActual.setTime(intervaloActual.getTime() + 30 * 60 * 1000); // Agregar 30 minutos
+            }
+
+            for (String intervalo : intervalos) {
+                System.out.println(intervalo);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        }
+        return intervalos;
+    }
+
+    public List<String> getTurnosNoEntregados(List<String> disponibles, List<String> entregados) {
+        List<String> lista1 = new ArrayList<>(entregados);
+        List<String> lista2 = new ArrayList<>(disponibles);
+        for (String intervalo : lista1) {
+            for (int i = 0; i < lista2.size(); i++) {
+                if (intervalo.equals(lista2.get(i))) {
+                    lista2.remove(i);
+                    i--;
+                }
+            }
+        }
+       return lista2;
     }
 
 }

@@ -12,6 +12,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.vettimeapp.modelos.Consulta;
+import com.example.vettimeapp.modelos.Empleado;
 import com.example.vettimeapp.modelos.Mascota;
 import com.example.vettimeapp.modelos.Tarea;
 import com.example.vettimeapp.modelos.Turno;
@@ -27,9 +29,13 @@ import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -138,10 +144,10 @@ public class NuevoTurnoViewModel extends AndroidViewModel {
         Tarea tareaSeleccionada = tareasDisponibles.stream().filter(t -> t.getTarea().equals(tarea)).findFirst().get();
 
         ArrayList<String> horarios = new ArrayList<>();
-        horarios.add("Seleccione horario...");
+
         try {
             ApiClient.EndPointVetTime end = ApiClient.getEndpointVetTime();
-            Call<List<TurnosPorTarea>> call = end.obtenerTurnos(tareaSeleccionada, mes+"-"+dia+"-"+anio);
+            Call<List<TurnosPorTarea>> call = end.obtenerTurnosPorFecha(tareaSeleccionada, mes+"-"+dia+"-"+anio);
             Log.d("salida", call.request().url().toString());
             call.enqueue(new Callback<List<TurnosPorTarea>>() {
                 @Override
@@ -151,8 +157,12 @@ public class NuevoTurnoViewModel extends AndroidViewModel {
                             Toast.makeText(context, "No hay turnos para esta tarea", Toast.LENGTH_LONG).show();
                         }else {
                             List<TurnosPorTarea> turnos = response.body();
+
                             horarios.addAll(utils.getTurnoTarea(turnos, nombreDia));
-                            mHorarios.setValue(horarios);
+
+                            filtraTurnosOcupados(dia, mes, anio, horarios);
+
+
                         }
                     }
                 }
@@ -165,6 +175,38 @@ public class NuevoTurnoViewModel extends AndroidViewModel {
         Log.d("salida 2", e.getMessage());
     }
 }
+    }
+
+    public void filtraTurnosOcupados(int dia, int mes, int anio,List<String> turnos) {
+
+        List<Consulta> consultas = new ArrayList<>();
+
+        try {
+            ApiClient.EndPointVetTime end = ApiClient.getEndpointVetTime();
+            Call<List<Consulta>> call = end.obtenerConsultasPorFecha(mes+"-"+dia+"-"+anio);
+            call.enqueue(new Callback<List<Consulta>>() {
+                @Override
+                public void onResponse(Call<List<Consulta>> call, Response<List<Consulta>> response) {
+                    if (response.body() != null) {
+
+                       consultas.addAll(response.body());
+                       List<String> intervalosConsultas = utils.getTurnosEntregados(consultas);
+                       HashSet<String> hashSet = new HashSet<>(utils.getTurnosNoEntregados(turnos, intervalosConsultas));
+                       ArrayList<String> arrayList = new ArrayList<>(hashSet);
+                       Collections.sort(arrayList);
+                       mHorarios.setValue(arrayList);
+
+                    }
+                }
+                @Override
+                public void onFailure(Call<List<Consulta>> call, Throwable t) {
+                    Log.d("salida 1", t.getMessage());
+                }
+            });
+        } catch (Exception e) {
+            Log.d("salida 2", e.getMessage());
+        }
+
     }
 
     public void crearConsulta(String tarea, String fecha, String hora, String mascota) {
