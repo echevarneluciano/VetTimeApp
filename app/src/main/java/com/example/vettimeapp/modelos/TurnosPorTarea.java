@@ -18,6 +18,7 @@ public class TurnosPorTarea {
     private String sunday_ini;
     private String sunday_fin;
     private Integer empleadoId;
+    private String tiempoTarea;
 
     public TurnosPorTarea() {
     }
@@ -25,7 +26,7 @@ public class TurnosPorTarea {
     public TurnosPorTarea(String monday_ini, String monday_fin, String tuesday_ini, String tuesday_fin,
                           String wednesday_ini, String wednesday_fin, String thursday_ini, String thursday_fin,
                           String friday_ini, String friday_fin, String saturday_ini, String saturday_fin,
-                          String sunday_ini, String sunday_fin, Integer empleadoId) {
+                          String sunday_ini, String sunday_fin, Integer empleadoId, String tiempoTarea) {
         this.monday_ini = monday_ini;
         this.monday_fin = monday_fin;
         this.tuesday_ini = tuesday_ini;
@@ -41,6 +42,15 @@ public class TurnosPorTarea {
         this.sunday_ini = sunday_ini;
         this.sunday_fin = sunday_fin;
         this.empleadoId = empleadoId;
+        this.tiempoTarea = tiempoTarea;
+    }
+
+    public String getTiempoTarea() {
+        return tiempoTarea;
+    }
+
+    public void setTiempoTarea(String tiempoTarea) {
+        this.tiempoTarea = tiempoTarea;
     }
 
     public String getMonday_ini() {
@@ -181,6 +191,7 @@ public class TurnosPorTarea {
                 ", sunday_ini='" + sunday_ini + '\'' +
                 ", sunday_fin='" + sunday_fin + '\'' +
                 ", empleadoId=" + empleadoId +
+                ", tiempoTarea='" + tiempoTarea +
                 '}';
     }
 }

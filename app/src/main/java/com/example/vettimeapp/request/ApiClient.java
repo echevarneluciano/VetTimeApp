@@ -1,5 +1,6 @@
 package com.example.vettimeapp.request;
 
+import com.example.vettimeapp.modelos.Cliente_mascota;
 import com.example.vettimeapp.modelos.Consulta;
 import com.example.vettimeapp.modelos.Empleado;
 import com.example.vettimeapp.modelos.Mascota;
@@ -50,11 +51,17 @@ public class ApiClient {
         @GET("Mascotas")
         Call<List<Mascota>> obtenerMascotas();
 
+        @GET("ClientesMascotas")
+        Call<List<Cliente_mascota>> obtenerClientesMascotas();
+
         @POST("Tareas/Turnos/{fecha}")
         Call<List<TurnosPorTarea>> obtenerTurnosPorFecha(@Body Tarea tarea, @Path("fecha") String fecha);
 
-        @POST("Consultas/Turnos/{fecha}")
-        Call<List<Consulta>> obtenerConsultasPorFecha(@Path("fecha") String fecha);
+        @GET("Consultas/Turnos/{fecha}/{tarea}")
+        Call<List<Consulta>> obtenerConsultasPorFecha(@Path("fecha") String fecha, @Path("tarea") String tarea);
+
+        @POST("Consultas/{tarea}")
+        Call<Consulta> nuevaConsultas(@Body Consulta consulta, @Path("tarea") String tarea);
 
     }
 

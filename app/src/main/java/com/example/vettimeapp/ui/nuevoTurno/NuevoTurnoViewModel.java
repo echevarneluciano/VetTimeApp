@@ -12,6 +12,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.vettimeapp.modelos.Cliente_mascota;
 import com.example.vettimeapp.modelos.Consulta;
 import com.example.vettimeapp.modelos.Empleado;
 import com.example.vettimeapp.modelos.Mascota;
@@ -25,6 +26,7 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Field;
 import java.sql.Time;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -46,8 +48,12 @@ public class NuevoTurnoViewModel extends AndroidViewModel {
     private  MutableLiveData<List<String>> mTareas;
     private MutableLiveData<List<String>> mMascotas;
     private MutableLiveData<List<String>> mHorarios;
+    private MutableLiveData<Boolean> mReset;
     private List<Tarea> tareasDisponibles;
+    private String fecha;
     private Context context;
+    private String tiempoTarea="00:30:00";
+    private List<Cliente_mascota> clientes_mascotas;
     private Utils utils;
 
 
@@ -78,9 +84,16 @@ public class NuevoTurnoViewModel extends AndroidViewModel {
         return mHorarios;
     }
 
+    public LiveData<Boolean> getReset() {
+        if(mReset == null) {
+            this.mReset = new MutableLiveData<>();
+        }
+        return mReset;
+    }
+
     public void setTareas() {
         ArrayList<String> tareas = new ArrayList<>();
-        tareas.add("Seleccione tarea...");
+        tareas.add("1-Seleccione tarea...");
         try {
             ApiClient.EndPointVetTime end = ApiClient.getEndpointVetTime();
             Call<List<Tarea>> call = end.obtenerTareas();
@@ -108,22 +121,23 @@ public class NuevoTurnoViewModel extends AndroidViewModel {
 
     public void setMascotas() {
         ArrayList<String> mascotas = new ArrayList<>();
-        mascotas.add("Seleccione mascota...");
+        mascotas.add("4-Seleccione mascota...");
         try {
             ApiClient.EndPointVetTime end = ApiClient.getEndpointVetTime();
-            Call<List<Mascota>> call = end.obtenerMascotas();
-            call.enqueue(new Callback<List<Mascota>>() {
+            Call<List<Cliente_mascota>> call = end.obtenerClientesMascotas();
+            call.enqueue(new Callback<List<Cliente_mascota>>() {
                 @Override
-                public void onResponse(Call<List<Mascota>> call, Response<List<Mascota>> response) {
+                public void onResponse(Call<List<Cliente_mascota>> call, Response<List<Cliente_mascota>> response) {
                     if (response.body() != null) {
-                        response.body().forEach(mascota -> {
-                            mascotas.add(mascota.getNombre());
+                        response.body().forEach(clientemascota -> {
+                           mascotas.add(clientemascota.getMascota().getNombre());
                         });
+                        clientes_mascotas = response.body();
                         mMascotas.setValue(mascotas);
                     }
                 }
                 @Override
-                public void onFailure(Call<List<Mascota>> call, Throwable t) {
+                public void onFailure(Call<List<Cliente_mascota>> call, Throwable t) {
                     Log.d("salida 1", t.getMessage());
                 }
             });
@@ -136,14 +150,16 @@ public class NuevoTurnoViewModel extends AndroidViewModel {
 
         String nombreDia = utils.getDate(anio, mes, dia);
         System.out.println("Nombre del día: " + nombreDia);
+        fecha = anio+"-"+mes+"-"+dia;
 
-        if(tarea.equals("Seleccione tarea...")) {
+        if(tarea.equals("1-Seleccione tarea...")) {
             Toast.makeText(context, "Seleccione una tarea", Toast.LENGTH_LONG).show();
         }else {
 
         Tarea tareaSeleccionada = tareasDisponibles.stream().filter(t -> t.getTarea().equals(tarea)).findFirst().get();
 
         ArrayList<String> horarios = new ArrayList<>();
+        mHorarios.setValue(horarios);
 
         try {
             ApiClient.EndPointVetTime end = ApiClient.getEndpointVetTime();
@@ -157,10 +173,11 @@ public class NuevoTurnoViewModel extends AndroidViewModel {
                             Toast.makeText(context, "No hay turnos para esta tarea", Toast.LENGTH_LONG).show();
                         }else {
                             List<TurnosPorTarea> turnos = response.body();
+                            tiempoTarea = turnos.get(0).getTiempoTarea();
 
                             horarios.addAll(utils.getTurnoTarea(turnos, nombreDia));
 
-                            filtraTurnosOcupados(dia, mes, anio, horarios);
+                            filtraTurnosOcupados(dia, mes, anio, horarios, tarea);
 
 
                         }
@@ -177,13 +194,14 @@ public class NuevoTurnoViewModel extends AndroidViewModel {
 }
     }
 
-    public void filtraTurnosOcupados(int dia, int mes, int anio,List<String> turnos) {
+    public void filtraTurnosOcupados(int dia, int mes, int anio,List<String> turnos,String tarea) {
 
         List<Consulta> consultas = new ArrayList<>();
 
         try {
             ApiClient.EndPointVetTime end = ApiClient.getEndpointVetTime();
-            Call<List<Consulta>> call = end.obtenerConsultasPorFecha(mes+"-"+dia+"-"+anio);
+            Call<List<Consulta>> call = end.obtenerConsultasPorFecha(mes+"-"+dia+"-"+anio, tarea);
+            Log.d("salida", call.request().url().toString());
             call.enqueue(new Callback<List<Consulta>>() {
                 @Override
                 public void onResponse(Call<List<Consulta>> call, Response<List<Consulta>> response) {
@@ -209,10 +227,52 @@ public class NuevoTurnoViewModel extends AndroidViewModel {
 
     }
 
-    public void crearConsulta(String tarea, String fecha, String hora, String mascota) {
+    public void crearConsulta(String tarea, String hora, String mascota) {
+        if(tarea.equals("1-Seleccione tarea...") || mascota.equals("1-Seleccione mascota...")) {
+            Toast.makeText(context, "Complete todos los campos", Toast.LENGTH_LONG).show();
+        }else {
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+        SimpleDateFormat formatFecha = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date horaDate = format.parse(hora);
+            Date tiempoTareaDate = format.parse(tiempoTarea);
+            Date fechaFormat = formatFecha.parse(fecha);
+            String fechaString = formatFecha.format(fechaFormat);
 
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(horaDate);
+            calendar.add(Calendar.MINUTE, tiempoTareaDate.getMinutes());
+            calendar.add(Calendar.HOUR, tiempoTareaDate.getHours());
+            horaDate = calendar.getTime();
 
+            String horaDateString = format.format(horaDate);
+            String fehaHoraInicio = fechaString + "T" + hora;
+            String fehaHoraFin = fechaString + "T" + horaDateString;
+            Consulta consulta = new Consulta();
+            consulta.setTiempoInicio(fehaHoraInicio);
+            consulta.setTiempoFin(fehaHoraFin);
+            int mascotaid = clientes_mascotas.stream().filter(c -> c.getMascota().getNombre().equals(mascota)).findFirst().get().getId();
+            consulta.setCliente_mascotaId(mascotaid);
+            Log.d("salida", consulta.toString());
 
+            ApiClient.EndPointVetTime end = ApiClient.getEndpointVetTime();
+            Call<Consulta> call = end.nuevaConsultas(consulta, tarea);
+            call.enqueue(new Callback<Consulta>() {
+                @Override
+                public void onResponse(Call<Consulta> call, Response<Consulta> response) {
+                    if (response.body() != null) {
+                        Toast.makeText(context, "Consulta agendada, fecha: "+response.body().getTiempoInicio(), Toast.LENGTH_SHORT).show();
+                        mReset.setValue(true);
+                    }
+                }
+                @Override
+                public void onFailure(Call<Consulta> call, Throwable t) {
+                    Log.d("salida 1", t.getMessage());
+                }
+            });
+        } catch (Exception e) {
+            Log.d("salida 2", e.getMessage());
+        }
     }
-
+    }
 }

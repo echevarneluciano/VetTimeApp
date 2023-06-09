@@ -6,17 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.nuevoTurno.NuevoTurnoFragment">
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="350dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="5dp"
-        android:text="4-Seleccione mascota:"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spHorario" />
-
     <Spinner
         android:id="@+id/spMascota"
         android:layout_width="350dp"
@@ -25,7 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintTop_toBottomOf="@+id/spHorario" />
 
     <Spinner
         android:id="@+id/spHorario"
@@ -59,23 +48,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spTarea" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="350dp"
-        android:layout_height="30dp"
-        android:text="1-Seleccione tipo de consulta requerida:"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <Spinner
         android:id="@+id/spTarea"
         android:layout_width="350dp"
         android:layout_height="50dp"
-        android:layout_marginTop="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <CalendarView
         android:id="@+id/dtCalendario"
